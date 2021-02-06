@@ -1,14 +1,35 @@
+import { useEffect } from 'react';
+import { connect } from 'react-redux';
+
 import Layout from './Layout/Layout';
+import Section from './Layout/Section';
+import ContactForm from './ContactForm/ContactForm';
+import ContactsList from './ContactsList/ContactsList';
+import Filter from './Filter/Filter';
 
-import './App.css';
+function App({ contacts }) {
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
 
-function App() {
   return (
     <Layout>
-      <h1>Home Work #2.2</h1>
-      <div>Hello</div>
+      <Section title="Phonebook">
+        <ContactForm />
+      </Section>
+
+      {contacts.length ? (
+        <Section title="Contacts">
+          <Filter />
+          <ContactsList />
+        </Section>
+      ) : null}
     </Layout>
   );
 }
 
-export default App;
+const mapStateToProps = state => ({
+  contacts: state.contacts,
+});
+
+export default connect(mapStateToProps)(App);
